@@ -1,4 +1,4 @@
-package readermonad2
+package readermonad4di.p23
 
 /**
  * Created by fukuo33 on 2014/07/06.
@@ -6,8 +6,6 @@ package readermonad2
 object Function {
 
   def main(args: Array[String]) {
-    println("Hello Reader Monad!")
-
     def p24 = {
       val add2: Int => Int = _ + 2
       add2(3)
@@ -45,4 +43,3 @@ object Function {
   }
 
 }
-

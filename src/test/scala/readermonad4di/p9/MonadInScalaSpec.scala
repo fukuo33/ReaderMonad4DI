@@ -1,4 +1,4 @@
-package example
+package readermonad4di.example
 
 import org.specs2.mutable.SpecificationWithJUnit
 

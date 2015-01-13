@@ -1,4 +1,4 @@
-package readermonad10
+package readermonad4di.p73
 
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -8,15 +8,17 @@ import scalaz._
 import Scalaz._
 import scalaz.concurrent.{Future => ZFuture}
 
-/**
- * p73
- */
 object MonadTransformers2 {
   def main(args: Array[String]) {
-    println("Hello MonadTransformers2!")
 
-    val email = UserService.getEmail(100)
-    println(email(productionEnv).run)
+    def idToAddress(id: Int) =
+      for {
+        email <- UserService.getEmail(id)
+        address <- UserService.findAddress(email)
+      } yield address
+    
+    println(idToAddress(100)(productionEnv).run)
+    
   }
 
   type Query[A] = ReaderT[ZFuture, Env, A]
@@ -39,7 +41,7 @@ object MonadTransformers2 {
 
   object AddressRepo {
     import Repositories.addressRepo
-    def getAddress(id: Int) = addressRepo map (_.get(id))
+    def getAddress(id: Int)(implicit ec: ExecutionContext) = Query.lift(addressRepo map (_.get(id)))
   }
 
   case class MyRepositories() extends Repositories {
@@ -89,11 +91,11 @@ object MonadTransformers2 {
         user <- UserRepo.getUser(userId)
       } yield user.email
 
-//    def findAddress(email: String)(implicit ec: ExecutionContext) =
-//      for {
-//        user <- UserRepo.findUser(email)
-//        address <- AddressRepo.getAddress(user.id)
-//      } yield address
+    def findAddress(email: String)(implicit ec: ExecutionContext) =
+      for {
+        user <- UserRepo.findUser(email)
+        address <- AddressRepo.getAddress(user.id)
+      } yield address
   }
 
   trait ConfigurationComponent {

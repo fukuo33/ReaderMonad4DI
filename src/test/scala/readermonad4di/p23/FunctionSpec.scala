@@ -1,4 +1,4 @@
-package readermonad2
+package readermonad4di.p23
 
 import org.specs2.mutable.SpecificationWithJUnit
 

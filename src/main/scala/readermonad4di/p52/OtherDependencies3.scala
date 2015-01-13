@@ -1,11 +1,11 @@
-package readermonad7
+package readermonad4di.p52
 
 import scalaz._
 import Scalaz._
+import readermonad4di.common._
+import readermonad4di.p46._
 
-/**
- * p52
- */
+
 object OtherDependencies3 {
 
   def main(args: Array[String]) {
@@ -13,48 +13,10 @@ object OtherDependencies3 {
   }
 }
 
-case class User(id: Int, supervisorId: Int, email: String)
-
-trait UserRepo {
-  def get(userId: Int): User
-  def find(email: String): User
-  def update(user: User): User
-}
-
-trait AddressRepo {
-  def get(id: Int): String
-}
-
 object AddressRepo {
   import Repositories.addressRepo
 
   def getAddress(id: Int) = addressRepo map (_.get(id))
-}
-
-case class MyRepositories() extends Repositories {
-  def userRepo: UserRepo = MyUserRepo()
-  def addressRepo: AddressRepo = MyAdressRepo()
-}
-
-case class MyUserRepo() extends UserRepo {
-  def get(userId: Int): User = User(userId, userId * 100, s"$userId@a.com")
-  def find(email: String): User = User(2, 200, email)
-  def update(user: User): User = User(3, 300, s"c@a.com")
-}
-
-case class MyAdressRepo() extends AddressRepo {
-  def get(id: Int): String = s"$id@a.com"
-}
-
-trait EmailService {
-}
-
-trait Configuration {
-}
-
-trait Repositories {
-  def userRepo: UserRepo
-  def addressRepo: AddressRepo
 }
 
 object Repositories {
@@ -134,7 +96,6 @@ trait PlayEmailServiceComponent extends EmailServiceComponent {
 trait MongoRepositoriesComponent extends RepositoriesComponent {
   lazy val _repositories = MyRepositories()
   def repositories: Repositories = _repositories
-
 }
 
 object Env {
@@ -144,14 +105,3 @@ object Env {
   val repositories = env map (_.repositories)
 }
 
-//object testEnv extends Env
-//with MockConfigComponent
-//with MockEmailServiceComponent
-//with MockRepositoriesComponent
-
-
-case class ProductionEmailService() extends EmailService {
-}
-
-case class ProductionConfiguration() extends Configuration {
-}

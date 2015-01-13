@@ -1,4 +1,4 @@
-package readermonad9
+package readermonad4di.p63
 
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -8,14 +8,10 @@ import scalaz._
 import Scalaz._
 import scalaz.concurrent.{Future => ZFuture}
 
-/**
- * p63
- */
 object MonadTransformers {
   def main(args: Array[String]) {
-    println("Hello MonadTransformers!")
-
     println(getUser(5)(MyUserRepo()).run)
+    println(getEmail(123)(MyUserRepo()).run)
     println(UserRepo.getUser(5)(MyUserRepo()).run)
   }
 
